@@ -152,10 +152,10 @@ cd ../../02-docker/develop
 
 ```bash
 # Build image
-docker build -t my-agent:basic .
+docker build -f 02-docker/develop/Dockerfile -t my-agent:develop .
 
 # Run container
-docker run -p 8000:8000 my-agent:basic
+docker run -p 8000:8000 my-agent:develop
 
 # Test
 curl http://localhost:8000/ask -X POST \
@@ -165,7 +165,7 @@ curl http://localhost:8000/ask -X POST \
 
 **Quan sát:** Image size là bao nhiêu?
 ```bash
-docker images my-agent:basic
+docker images my-agent:develop
 ```
 
 ### 📝 Exercise 2.3: Multi-stage build

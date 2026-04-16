@@ -3,11 +3,8 @@ Agent Railway-ready.
 Railway inject PORT env var tự động — agent phải dùng os.getenv("PORT").
 """
 import os
-import sys
 import time
 from datetime import datetime, timezone
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware

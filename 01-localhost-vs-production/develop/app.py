@@ -4,9 +4,7 @@
 Đây là cách KHÔNG NÊN làm. Dùng để so sánh với advanced/.
 Hãy đếm bao nhiêu vấn đề bạn tìm được trong file này.
 """
-import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from fastapi import FastAPI
 import uvicorn

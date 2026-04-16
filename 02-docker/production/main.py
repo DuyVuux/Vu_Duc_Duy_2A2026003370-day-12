@@ -1,8 +1,7 @@
 """
-Agent production-ready — dùng trong Docker advanced stack.
+Agent production-ready — dùng trong Docker production stack.
 """
 import os
-import sys
 import time
 import logging
 import json
@@ -12,14 +11,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-
-# Import mock LLM
-sys.path.insert(0, '/app')
-try:
-    from utils.mock_llm import ask
-except ImportError:
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-    from utils.mock_llm import ask
+from utils.mock_llm import ask
 
 logging.basicConfig(
     level=logging.INFO,

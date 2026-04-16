@@ -2,20 +2,11 @@
 Agent đơn giản để demo Dockerfile cơ bản.
 """
 import os
-import sys
 import time
-
-sys.path.insert(0, '/app/utils')  # path trong container
 
 from fastapi import FastAPI
 import uvicorn
-
-try:
-    from mock_llm import ask
-except ImportError:
-    # fallback nếu chạy ngoài container
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-    from utils.mock_llm import ask
+from utils.mock_llm import ask
 
 app = FastAPI(title="Agent Basic Docker")
 START_TIME = time.time()

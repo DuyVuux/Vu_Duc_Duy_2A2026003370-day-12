@@ -24,13 +24,11 @@ Dùng token:
          -d '{"question": "what is docker?"}'
 """
 import os
-import sys
 import time
 import logging
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from fastapi import FastAPI, Depends, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware

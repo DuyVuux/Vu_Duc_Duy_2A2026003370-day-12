@@ -20,9 +20,7 @@ Test:
          http://localhost:8000/ask
 """
 import os
-import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from fastapi import FastAPI, HTTPException, Security, Depends
 from fastapi.security.api_key import APIKeyHeader

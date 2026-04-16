@@ -17,7 +17,6 @@ Demo:
   python test_stateless.py
 """
 import os
-import sys
 import time
 import json
 import logging
@@ -25,7 +24,6 @@ import uuid
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware

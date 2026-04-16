@@ -9,7 +9,6 @@ So sánh với basic/app.py để thấy sự khác biệt:
   ✅ 0.0.0.0 binding (chạy được trong container)
   ✅ Port từ PORT env var (Railway/Render inject tự động)
 """
-import sys
 import os
 import signal
 import logging
@@ -18,7 +17,6 @@ import time
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware

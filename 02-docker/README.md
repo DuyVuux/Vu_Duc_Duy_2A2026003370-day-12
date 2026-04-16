@@ -20,16 +20,17 @@ develop/
 
 ### Chạy thử
 ```bash
-cd basic
+# IMPORTANT: Build from project root!
+cd ../..  # Go to project root
 
 # Build image
-docker build -t agent-basic .
+docker build -f 02-docker/develop/Dockerfile -t agent-develop .
 
 # Xem size
-docker images agent-basic
+docker images agent-develop
 
 # Chạy container
-docker run -p 8000:8000 agent-basic
+docker run -p 8000:8000 agent-develop
 
 # Test
 curl http://localhost:8000/health
@@ -52,19 +53,20 @@ production/
 
 ### Chạy thử
 ```bash
-cd advanced
+# From project root
+cd ../..  # if not already there
 
 # Khởi động toàn bộ stack (1 lệnh!)
-docker compose up
+docker compose -f 02-docker/production/docker-compose.yml up
 
 # Xem các service đang chạy
-docker compose ps
+docker compose -f 02-docker/production/docker-compose.yml ps
 
 # Test agent qua Nginx
 curl http://localhost/health
 
 # Dừng toàn bộ
-docker compose down
+docker compose -f 02-docker/production/docker-compose.yml down
 ```
 
 ### So sánh image size:
