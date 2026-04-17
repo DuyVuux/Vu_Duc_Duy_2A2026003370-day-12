@@ -16,13 +16,13 @@ docker build -t <image-name>:<tag> .
 docker run -p <host-port>:<container-port> <image-name>
 
 # Run với environment variables
-docker run -e KEY=value -p 8000:8000 <image-name>
+docker run -e KEY=value -p 8086:8086 <image-name>
 
 # Run detached (background)
-docker run -d -p 8000:8000 <image-name>
+docker run -d -p 8086:8086 <image-name>
 
 # Run với volume
-docker run -v $(pwd):/app -p 8000:8000 <image-name>
+docker run -v $(pwd):/app -p 8086:8086 <image-name>
 ```
 
 ### Debug
@@ -184,7 +184,7 @@ services:
 OPENAI_API_KEY=sk-abc123
 AGENT_API_KEY=secret-key-123
 REDIS_URL=redis://localhost:6379
-PORT=8000
+PORT=8086
 LOG_LEVEL=INFO
 ```
 
@@ -195,7 +195,7 @@ LOG_LEVEL=INFO
 OPENAI_API_KEY=your-openai-key-here
 AGENT_API_KEY=your-secret-key-here
 REDIS_URL=redis://localhost:6379
-PORT=8000
+PORT=8086
 LOG_LEVEL=INFO
 ```
 
@@ -208,7 +208,7 @@ class Settings(BaseSettings):
     openai_api_key: str
     agent_api_key: str
     redis_url: str = "redis://localhost:6379"
-    port: int = 8000
+    port: int = 8086
     log_level: str = "INFO"
     
     class Config:
@@ -254,7 +254,7 @@ def ready():
 services:
   agent:
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -477,7 +477,7 @@ USER appuser
 # Make sure scripts in .local are usable
 ENV PATH=/root/.local/bin:$PATH
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8086"]
 ```
 
 ### .dockerignore
@@ -513,28 +513,28 @@ venv/
 
 ```bash
 # GET request
-curl http://localhost:8000/health
+curl http://localhost:8086/health
 
 # POST with JSON
-curl -X POST http://localhost:8000/ask \
+curl -X POST http://localhost:8086/ask \
   -H "Content-Type: application/json" \
   -H "X-API-Key: secret" \
   -d '{"question": "Hello"}'
 
 # With Bearer token
-curl -X POST http://localhost:8000/ask \
+curl -X POST http://localhost:8086/ask \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 
 # Save response to file
-curl http://localhost:8000/ask -o response.json
+curl http://localhost:8086/ask -o response.json
 
 # Show response headers
-curl -i http://localhost:8000/health
+curl -i http://localhost:8086/health
 
 # Follow redirects
-curl -L http://localhost:8000/redirect
+curl -L http://localhost:8086/redirect
 ```
 
 ### HTTPie (more user-friendly)
@@ -544,15 +544,15 @@ curl -L http://localhost:8000/redirect
 pip install httpie
 
 # GET
-http localhost:8000/health
+http localhost:8086/health
 
 # POST
-http POST localhost:8000/ask \
+http POST localhost:8086/ask \
   X-API-Key:secret \
   question="Hello"
 
 # Pretty print
-http --pretty=all localhost:8000/ask
+http --pretty=all localhost:8086/ask
 ```
 
 ### Python requests
@@ -561,12 +561,12 @@ http --pretty=all localhost:8000/ask
 import requests
 
 # GET
-response = requests.get("http://localhost:8000/health")
+response = requests.get("http://localhost:8086/health")
 print(response.json())
 
 # POST with auth
 response = requests.post(
-    "http://localhost:8000/ask",
+    "http://localhost:8086/ask",
     headers={"X-API-Key": "secret"},
     json={"question": "Hello"}
 )
@@ -581,10 +581,10 @@ print(response.json())
 
 ```bash
 # macOS/Linux
-lsof -i :8000
+lsof -i :8086
 
 # Kill process on port
-kill -9 $(lsof -t -i:8000)
+kill -9 $(lsof -t -i:8086)
 ```
 
 ### Check container networking
@@ -673,7 +673,7 @@ FROM python:3.11-alpine
 
 ```bash
 # Find and kill process
-lsof -ti:8000 | xargs kill -9
+lsof -ti:8086 | xargs kill -9
 ```
 
 ### "Cannot connect to Redis"

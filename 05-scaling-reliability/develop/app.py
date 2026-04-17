@@ -10,8 +10,8 @@ Chạy:
     python app.py
 
 Test health check:
-    curl http://localhost:8000/health
-    curl http://localhost:8000/ready
+    curl http://localhost:8086/health
+    curl http://localhost:8086/ready
 
 Simulate shutdown:
     # Trong terminal khác
@@ -188,7 +188,7 @@ signal.signal(signal.SIGINT, handle_sigterm)
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8086))
     logger.info(f"Starting agent on port {port}")
     uvicorn.run(
         app,

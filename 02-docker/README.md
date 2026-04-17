@@ -30,10 +30,10 @@ docker build -f 02-docker/develop/Dockerfile -t agent-develop .
 docker images agent-develop
 
 # Chạy container
-docker run -p 8000:8000 agent-develop
+docker run -p 8086:8086 agent-develop
 
 # Test
-curl http://localhost:8000/health
+curl http://localhost:8086/health
 ```
 
 ---

@@ -13,13 +13,13 @@ Chạy:
     python app.py
 
 Lấy token:
-    curl -X POST http://localhost:8000/auth/token \\
+    curl -X POST http://localhost:8086/auth/token \\
          -H "Content-Type: application/json" \\
          -d '{"username": "student", "password": "demo123"}'
 
 Dùng token:
     curl -H "Authorization: Bearer <token>" \\
-         -X POST http://localhost:8000/ask \\
+         -X POST http://localhost:8086/ask \\
          -H "Content-Type: application/json" \\
          -d '{"question": "what is docker?"}'
 """
@@ -194,7 +194,7 @@ def health():
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8086))
     print("\n=== Demo credentials ===")
     print("  student / demo123  (10 req/min, $1/day budget)")
     print("  teacher / teach456 (100 req/min, $1/day budget)")

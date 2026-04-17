@@ -65,7 +65,7 @@
 
 **Exercise 2.4 diagram:**
 ```
-Client → Nginx (port 80) → Agent (port 8000) → Redis (port 6379)
+Client → Nginx (port 80) → Agent (port 8086) → Redis (port 6379)
 ```
 
 ---
@@ -115,7 +115,7 @@ curl -X POST https://student-app.railway.app/ask \
 # test_security.py
 import requests
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8086"
 
 def test_api_key():
     # Without key
@@ -169,8 +169,8 @@ if __name__ == "__main__":
 
 ```bash
 # Test health checks
-curl http://localhost:8000/health  # Should return 200
-curl http://localhost:8000/ready   # Should return 200 or 503
+curl http://localhost:8086/health  # Should return 200
+curl http://localhost:8086/ready   # Should return 200 or 503
 
 # Test graceful shutdown
 python app.py &

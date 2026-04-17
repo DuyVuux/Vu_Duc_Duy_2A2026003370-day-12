@@ -24,7 +24,7 @@ RUN mkdir -p utils
 COPY utils/mock_llm.py utils/
 
 # Bước 7: Expose port để documentation (không bắt buộc)
-EXPOSE 8000
+EXPOSE 8086
 
 # Bước 8: Command mặc định khi container start
 CMD ["python", "app.py"]
@@ -33,6 +33,6 @@ CMD ["python", "app.py"]
 # Để build và chạy:
 #   cd ../../  # Go to project root
 #   docker build -f 02-docker/develop/Dockerfile -t agent-develop .
-#   docker run -p 8000:8000 agent-develop
-#   curl http://localhost:8000/health
+#   docker run -p 8086:8086 agent-develop
+#   curl http://localhost:8086/health
 # ============================================================

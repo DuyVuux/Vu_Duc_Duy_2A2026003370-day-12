@@ -29,7 +29,7 @@ Localhost Agent          Production Agent
 ```python
 # Your code
 api_key = "sk-abc123"  # 😱
-app.run(port=8000)     # 🔒 Hardcoded
+app.run(port=8086)     # 🔒 Hardcoded
 ```
 
 **Problem:** 
@@ -43,7 +43,7 @@ app.run(port=8000)     # 🔒 Hardcoded
 ```python
 # Better code
 api_key = os.getenv("OPENAI_API_KEY")  # ✅
-port = int(os.getenv("PORT", 8000))    # ✅
+port = int(os.getenv("PORT", 8086))    # ✅
 ```
 
 **You learn:** Dev ≠ Production

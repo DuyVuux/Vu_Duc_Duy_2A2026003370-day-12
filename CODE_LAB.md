@@ -87,7 +87,7 @@ python app.py
 
 Test:
 ```bash
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 ```
@@ -155,10 +155,10 @@ cd ../../02-docker/develop
 docker build -f 02-docker/develop/Dockerfile -t my-agent:develop .
 
 # Run container
-docker run -p 8000:8000 my-agent:develop
+docker run -p 8086:8086 my-agent:develop
 
 # Test
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "What is Docker?"}'
 ```
@@ -256,7 +256,7 @@ railway init
 
 4. Set environment variables:
 ```bash
-railway variables set PORT=8000
+railway variables set PORT=8086
 railway variables set AGENT_API_KEY=my-secret-key
 ```
 
@@ -347,12 +347,12 @@ Test:
 python app.py
 
 #  Không có key
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 
 #  Có key
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "X-API-Key: secret-key-123" \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
@@ -370,7 +370,7 @@ cd ../production
 ```bash
 python app.py
 
-curl http://localhost:8000/token -X POST \
+curl http://localhost:8086/token -X POST \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "secret"}'
 ```
@@ -378,7 +378,7 @@ curl http://localhost:8000/token -X POST \
 3. Dùng token để gọi API:
 ```bash
 TOKEN="<token_từ_bước_2>"
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"question": "Explain JWT"}'
@@ -395,7 +395,7 @@ Test:
 ```bash
 # Gọi liên tục 20 lần
 for i in {1..20}; do
-  curl http://localhost:8000/ask -X POST \
+  curl http://localhost:8086/ask -X POST \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -d '{"question": "Test '$i'"}'
@@ -542,7 +542,7 @@ python app.py &
 PID=$!
 
 # Gửi request
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "Long task"}' &
 

@@ -43,7 +43,7 @@ Cannot connect to the Docker daemon at unix:///var/run/docker.sock
 
 **Symptoms:**
 ```
-Error starting userland proxy: listen tcp4 0.0.0.0:8000: bind: address already in use
+Error starting userland proxy: listen tcp4 0.0.0.0:8086: bind: address already in use
 ```
 
 **Solutions:**
@@ -51,16 +51,16 @@ Error starting userland proxy: listen tcp4 0.0.0.0:8000: bind: address already i
 1. **Find process using port:**
    ```bash
    # macOS/Linux
-   lsof -i :8000
+   lsof -i :8086
    
    # Windows
-   netstat -ano | findstr :8000
+   netstat -ano | findstr :8086
    ```
 
 2. **Kill process:**
    ```bash
    # macOS/Linux
-   kill -9 $(lsof -t -i:8000)
+   kill -9 $(lsof -t -i:8086)
    
    # Windows
    taskkill /PID <PID> /F
@@ -68,7 +68,7 @@ Error starting userland proxy: listen tcp4 0.0.0.0:8000: bind: address already i
 
 3. **Use different port:**
    ```bash
-   docker run -p 8001:8000 myapp
+   docker run -p 8001:8086 myapp
    ```
 
 4. **Stop conflicting container:**
@@ -368,10 +368,10 @@ requests.get("http://redis:6379")  # Connection refused
    - **Wrong PORT:**
      ```python
      # ✅ Use Railway's PORT
-     port = int(os.getenv("PORT", 8000))
+     port = int(os.getenv("PORT", 8086))
      
      # ❌ Hardcoded port
-     port = 8000
+     port = 8086
      ```
    
    - **Memory limit exceeded:**
@@ -454,10 +454,10 @@ Health check failed: GET /health returned 404
 1. **Check header name:**
    ```bash
    # ✅ Correct
-   curl -H "X-API-Key: secret" http://localhost:8000/ask
+   curl -H "X-API-Key: secret" http://localhost:8086/ask
    
    # ❌ Wrong
-   curl -H "API-Key: secret" http://localhost:8000/ask
+   curl -H "API-Key: secret" http://localhost:8086/ask
    ```
 
 2. **Check environment variable:**
@@ -481,7 +481,7 @@ Health check failed: GET /health returned 404
 
 1. **Get new token:**
    ```bash
-   curl -X POST http://localhost:8000/token \
+   curl -X POST http://localhost:8086/token \
      -H "Content-Type: application/json" \
      -d '{"username": "admin", "password": "secret"}'
    ```
@@ -637,7 +637,7 @@ Health check failed: GET /health returned 404
 
 1. **Test endpoint manually:**
    ```bash
-   curl http://localhost:8000/health
+   curl http://localhost:8086/health
    ```
 
 2. **Check response format:**

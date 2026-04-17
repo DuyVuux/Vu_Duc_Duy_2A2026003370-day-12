@@ -12,12 +12,12 @@ Test:
     curl -H "X-API-Key: my-secret-key" -X POST \\
          -H "Content-Type: application/json" \\
          -d '{"question":"hello"}' \\
-         http://localhost:8000/ask
+         http://localhost:8086/ask
 
     # Không có key → 401
     curl -X POST -H "Content-Type: application/json" \\
          -d '{"question":"hello"}' \\
-         http://localhost:8000/ask
+         http://localhost:8086/ask
 """
 import os
 
@@ -83,7 +83,7 @@ def health():
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8086))
     print(f"API Key: {API_KEY}")
     print(f"Test: curl -H 'X-API-Key: {API_KEY}' http://localhost:{port}/ask?question=hello")
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)

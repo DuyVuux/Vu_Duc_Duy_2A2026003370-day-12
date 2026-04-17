@@ -22,7 +22,7 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379/0
       - ENVIRONMENT=demo
-      - PORT=8000
+      - PORT=8086
     env_file:
       - .env.local
     depends_on:
@@ -30,7 +30,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c",
-             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+             "import urllib.request; urllib.request.urlopen('http://localhost:8086/health')"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -65,7 +65,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "8080:80"
+      - "8081:8086"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:

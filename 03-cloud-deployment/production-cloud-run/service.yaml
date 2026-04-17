@@ -31,7 +31,7 @@ spec:
       containers:
         - image: gcr.io/PROJECT_ID/ai-agent:latest
           ports:
-            - containerPort: 8000
+            - containerPort: 8086
 
           # ──────────────────────────────────────
           # Resources
@@ -51,7 +51,7 @@ spec:
             - name: ENVIRONMENT
               value: production
             - name: PORT
-              value: "8000"
+              value: "8086"
             # Secret từ Secret Manager — KHÔNG hardcode
             - name: OPENAI_API_KEY
               valueFrom:
@@ -70,14 +70,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 8000
+              port: 8086
             initialDelaySeconds: 10
             periodSeconds: 30
 
           startupProbe:
             httpGet:
               path: /ready
-              port: 8000
+              port: 8086
             initialDelaySeconds: 5
             failureThreshold: 10
             periodSeconds: 3

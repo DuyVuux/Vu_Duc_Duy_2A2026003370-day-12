@@ -54,7 +54,7 @@ python app.py
 
 In another terminal:
 ```bash
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 ```
@@ -72,12 +72,12 @@ cd ../../02-docker/develop
 docker build -t my-agent .
 
 # Run container
-docker run -p 8000:8000 my-agent
+docker run -p 8086:8086 my-agent
 ```
 
 Test again:
 ```bash
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "What is Docker?"}'
 ```
@@ -132,7 +132,7 @@ python app.py
 
 Test without key (should fail):
 ```bash
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 # Expected: 401 Unauthorized
@@ -140,7 +140,7 @@ curl http://localhost:8000/ask -X POST \
 
 Test with key (should work):
 ```bash
-curl http://localhost:8000/ask -X POST \
+curl http://localhost:8086/ask -X POST \
   -H "X-API-Key: my-secret-key" \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
@@ -198,8 +198,8 @@ Browse through each section's `develop/` and `production/` folders.
 
 **"Port already in use"**
 ```bash
-# Kill process on port 8000
-lsof -ti:8000 | xargs kill -9
+# Kill process on port 8086
+lsof -ti:8086 | xargs kill -9
 ```
 
 **"Docker daemon not running"**
@@ -271,10 +271,10 @@ Create a `commands.sh` file with your frequently used commands:
 
 # Build and run
 alias build="docker build -t my-agent ."
-alias run="docker run -p 8000:8000 my-agent"
+alias run="docker run -p 8086:8086 my-agent"
 
 # Test
-alias test="curl http://localhost:8000/health"
+alias test="curl http://localhost:8086/health"
 ```
 
 ### Tip 4: Use .env Files
@@ -282,13 +282,13 @@ alias test="curl http://localhost:8000/health"
 Instead of exporting variables:
 ```bash
 export API_KEY=secret
-export PORT=8000
+export PORT=8086
 ```
 
 Create `.env` file:
 ```
 API_KEY=secret
-PORT=8000
+PORT=8086
 ```
 
 Then load it:
