@@ -1,0 +1,12 @@
+
+=== BLOCK 8.8.8.8 ===
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    21  100    21    0     0    502      0 --:--:-- --:--:-- --:--:--   512
+HTTP/1.1 500 Internal Server Error
+date: Fri, 17 Apr 2026 16:32:44 GMT
+server: uvicorn
+content-length: 21
+content-type: text/plain; charset=utf-8
+
+Internal Server Error

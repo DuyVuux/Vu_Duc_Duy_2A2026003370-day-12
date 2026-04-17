@@ -1,0 +1,19 @@
+OPENAI_API_KEY not set — using mock LLM
+{"ts":"2026-04-17 23:31:34,390","lvl":"INFO","msg":"Starting Production AI Agent on 0.0.0.0:8086"}
+{"ts":"2026-04-17 23:31:34,390","lvl":"INFO","msg":"API Key: dev-****"}
+INFO:     Started server process [812522]
+INFO:     Waiting for application startup.
+{"ts":"2026-04-17 23:31:34,405","lvl":"INFO","msg":"{"event": "startup", "app": "Production AI Agent", "version": "1.0.0", "environment": "development"}"}
+{"ts":"2026-04-17 23:31:34,506","lvl":"INFO","msg":"{"event": "ready"}"}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8086 (Press CTRL+C to quit)
+{"ts":"2026-04-17 23:31:37,014","lvl":"INFO","msg":"{"event": "request", "method": "GET", "path": "/health", "status": 200, "ms": 1.7}"}
+INFO:     127.0.0.1:47820 - "GET /health HTTP/1.1" 200 OK
+{"ts":"2026-04-17 23:31:37,020","lvl":"INFO","msg":"{"event": "request", "method": "HEAD", "path": "/health", "status": 405, "ms": 0.3}"}
+INFO:     127.0.0.1:47824 - "HEAD /health HTTP/1.1" 405 Method Not Allowed
+{"ts":"2026-04-17 23:31:37,022","lvl":"INFO","msg":"{"event": "shutdown_signal", "signal": "SIGTERM"}"}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+{"ts":"2026-04-17 23:31:48,858","lvl":"INFO","msg":"{"event": "shutdown"}"}
+INFO:     Application shutdown complete.
+INFO:     Finished server process [812522]

@@ -1,0 +1,11 @@
+{"ts":"2026-04-17 23:44:24,399","lvl":"INFO","msg":"Starting Production AI Agent on 0.0.0.0:8086"}
+{"ts":"2026-04-17 23:44:24,399","lvl":"INFO","msg":"API Key: dev-****"}
+INFO:     Started server process [830416]
+INFO:     Waiting for application startup.
+{"ts":"2026-04-17 23:44:24,413","lvl":"INFO","msg":"{"event": "startup", "app": "Production AI Agent", "version": "1.0.0", "environment": "development"}"}
+{"ts":"2026-04-17 23:44:24,513","lvl":"INFO","msg":"{"event": "ready"}"}
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8086): address already in use
+INFO:     Waiting for application shutdown.
+{"ts":"2026-04-17 23:44:24,517","lvl":"INFO","msg":"{"event": "shutdown"}"}
+INFO:     Application shutdown complete.

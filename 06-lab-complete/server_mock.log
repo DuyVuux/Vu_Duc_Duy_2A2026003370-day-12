@@ -1,0 +1,13 @@
+OPENAI_API_KEY not set — using mock LLM
+{"ts":"2026-04-17 23:44:20,112","lvl":"INFO","msg":"Starting Production AI Agent on 0.0.0.0:8086"}
+{"ts":"2026-04-17 23:44:20,112","lvl":"INFO","msg":"API Key: dev-****"}
+INFO:     Started server process [830243]
+INFO:     Waiting for application startup.
+{"ts":"2026-04-17 23:44:20,128","lvl":"INFO","msg":"{"event": "startup", "app": "Production AI Agent", "version": "1.0.0", "environment": "development"}"}
+{"ts":"2026-04-17 23:44:20,229","lvl":"INFO","msg":"{"event": "ready"}"}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8086 (Press CTRL+C to quit)
+{"ts":"2026-04-17 23:44:23,812","lvl":"INFO","msg":"{"event": "request", "method": "POST", "path": "/ask", "status": 401, "ms": 1.1}"}
+INFO:     127.0.0.1:53214 - "POST /ask HTTP/1.1" 401 Unauthorized
+{"ts":"2026-04-17 23:44:27,897","lvl":"INFO","msg":"{"event": "request", "method": "POST", "path": "/ask", "status": 401, "ms": 1.0}"}
+INFO:     127.0.0.1:37154 - "POST /ask HTTP/1.1" 401 Unauthorized

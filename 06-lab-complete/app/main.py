@@ -24,6 +24,7 @@ from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Security, Depends, Request, Response
+from fastapi.responses import JSONResponse
 from fastapi.security.api_key import APIKeyHeader
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,9 +33,15 @@ import uvicorn
 
 from app.config import settings
 from app.auth import verify_token, authenticate_user, create_token
+from app.rate_limiter import rate_limiter
+from app.cost_guard import cost_guard
 
 # Mock LLM (thay bằng OpenAI/Anthropic khi có API key)
-from utils.mock_llm import ask as llm_ask
+import os
+if os.getenv("OPENAI_API_KEY"):
+    from utils.real_llm import ask as llm_ask
+else:
+    from utils.mock_llm import ask as llm_ask
 
 # ─────────────────────────────────────────────────────────
 # Logging — JSON structured
@@ -50,40 +57,7 @@ _is_ready = False
 _request_count = 0
 _error_count = 0
 
-# ─────────────────────────────────────────────────────────
-# Simple In-memory Rate Limiter
-# ─────────────────────────────────────────────────────────
-_rate_windows: dict[str, deque] = defaultdict(deque)
 
-def check_rate_limit(key: str):
-    now = time.time()
-    window = _rate_windows[key]
-    while window and window[0] < now - 60:
-        window.popleft()
-    if len(window) >= settings.rate_limit_per_minute:
-        raise HTTPException(
-            status_code=429,
-            detail=f"Rate limit exceeded: {settings.rate_limit_per_minute} req/min",
-            headers={"Retry-After": "60"},
-        )
-    window.append(now)
-
-# ─────────────────────────────────────────────────────────
-# Simple Cost Guard
-# ─────────────────────────────────────────────────────────
-_daily_cost = 0.0
-_cost_reset_day = time.strftime("%Y-%m-%d")
-
-def check_and_record_cost(input_tokens: int, output_tokens: int):
-    global _daily_cost, _cost_reset_day
-    today = time.strftime("%Y-%m-%d")
-    if today != _cost_reset_day:
-        _daily_cost = 0.0
-        _cost_reset_day = today
-    if _daily_cost >= settings.daily_budget_usd:
-        raise HTTPException(503, "Daily budget exhausted. Try tomorrow.")
-    cost = (input_tokens / 1000) * 0.00015 + (output_tokens / 1000) * 0.0006
-    _daily_cost += cost
 
 # ─────────────────────────────────────────────────────────
 # Auth
@@ -146,6 +120,18 @@ app.add_middleware(
 )
 
 @app.middleware("http")
+async def ip_whitelist_filter(request: Request, call_next):
+    if settings.ip_whitelist:
+        client_ip = request.client.host if request.client else "unknown"
+        if client_ip not in settings.ip_whitelist:
+            logger.warning(json.dumps({
+                "event": "ip_blocked",
+                "ip": client_ip,
+            }))
+            return JSONResponse(status_code=403, content={"detail": f"IP {client_ip} not allowed"})
+    return await call_next(request)
+
+@app.middleware("http")
 async def request_middleware(request: Request, call_next):
     global _request_count, _error_count
     start = time.time()
@@ -155,6 +141,10 @@ async def request_middleware(request: Request, call_next):
         # Security headers
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Content-Security-Policy"] = "default-src 'self'"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         if "server" in response.headers:
             del response.headers["server"]
         duration = round((time.time() - start) * 1000, 1)
@@ -238,11 +228,11 @@ async def ask_agent(
     **Authentication:** Include header `X-API-Key: <your-key>` or `Authorization: Bearer <token>`
     """
     # Rate limit per API key
-    check_rate_limit(_key[:8])  # use first 8 chars as key bucket
+    rate_limiter.check(_key[:8])  # use first 8 chars as key bucket
 
     # Budget check
     input_tokens = len(body.question.split()) * 2
-    check_and_record_cost(input_tokens, 0)
+    cost_guard.check_and_record(input_tokens, 0)
 
     logger.info(json.dumps({
         "event": "agent_call",
@@ -253,7 +243,7 @@ async def ask_agent(
     answer = llm_ask(body.question)
 
     output_tokens = len(answer.split()) * 2
-    check_and_record_cost(0, output_tokens)
+    cost_guard.check_and_record(0, output_tokens)
 
     return AskResponse(
         question=body.question,
@@ -268,14 +258,14 @@ async def summarize(
     request: Request,
     _key: str = Depends(verify_auth_method),
 ):
-    check_rate_limit(_key[:8])
+    rate_limiter.check(_key[:8])
     input_tokens = len(body.text.split()) * 2
-    check_and_record_cost(input_tokens, 0)
+    cost_guard.check_and_record(input_tokens, 0)
 
     summary = llm_ask(f"Summarize: {body.text[:200]}")
 
     output_tokens = len(summary.split()) * 2
-    check_and_record_cost(0, output_tokens)
+    cost_guard.check_and_record(0, output_tokens)
 
     return SummarizeResponse(
         original_length=len(body.text),
@@ -314,20 +304,21 @@ def metrics(_key: str = Depends(verify_auth_method)):
         "uptime_seconds": round(time.time() - START_TIME, 1),
         "total_requests": _request_count,
         "error_count": _error_count,
-        "daily_cost_usd": round(_daily_cost, 4),
+        "daily_cost_usd": round(cost_guard.daily_cost, 4),
         "daily_budget_usd": settings.daily_budget_usd,
-        "budget_used_pct": round(_daily_cost / settings.daily_budget_usd * 100, 1),
+        "budget_used_pct": round(cost_guard.daily_cost / settings.daily_budget_usd * 100, 1),
     }
 
 
 # ─────────────────────────────────────────────────────────
-# Graceful Shutdown
+# Graceful Shutdown logs are handled by lifespan
 # ─────────────────────────────────────────────────────────
-def _handle_signal(signum, _frame):
-    logger.info(json.dumps({"event": "signal", "signum": signum}))
+def sigterm_handler(signum, frame):
+    logger.info(json.dumps({"event": "shutdown_signal", "signal": "SIGTERM"}))
+    global _is_ready
+    _is_ready = False
 
-signal.signal(signal.SIGTERM, _handle_signal)
-
+signal.signal(signal.SIGTERM, sigterm_handler)
 
 if __name__ == "__main__":
     logger.info(f"Starting {settings.app_name} on {settings.host}:{settings.port}")

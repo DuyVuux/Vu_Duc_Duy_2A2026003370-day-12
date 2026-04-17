@@ -1,0 +1,12 @@
+OPENAI_API_KEY not set — using mock LLM
+{"ts":"2026-04-17 23:33:15,234","lvl":"INFO","msg":"Starting Production AI Agent on 0.0.0.0:8086"}
+{"ts":"2026-04-17 23:33:15,234","lvl":"INFO","msg":"API Key: dev-****"}
+INFO:     Started server process [815244]
+INFO:     Waiting for application startup.
+{"ts":"2026-04-17 23:33:15,256","lvl":"INFO","msg":"{"event": "startup", "app": "Production AI Agent", "version": "1.0.0", "environment": "development"}"}
+{"ts":"2026-04-17 23:33:15,356","lvl":"INFO","msg":"{"event": "ready"}"}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8086 (Press CTRL+C to quit)
+{"ts":"2026-04-17 23:33:16,861","lvl":"WARNING","msg":"{"event": "ip_blocked", "ip": "127.0.0.1"}"}
+{"ts":"2026-04-17 23:33:16,861","lvl":"INFO","msg":"{"event": "request", "method": "GET", "path": "/health", "status": 403, "ms": 0.4}"}
+INFO:     127.0.0.1:44222 - "GET /health HTTP/1.1" 403 Forbidden

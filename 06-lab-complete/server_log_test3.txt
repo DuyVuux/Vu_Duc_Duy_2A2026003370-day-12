@@ -1,0 +1,111 @@
+OPENAI_API_KEY not set — using mock LLM
+{"ts":"2026-04-17 23:32:43,100","lvl":"INFO","msg":"Starting Production AI Agent on 0.0.0.0:8086"}
+{"ts":"2026-04-17 23:32:43,100","lvl":"INFO","msg":"API Key: dev-****"}
+INFO:     Started server process [814365]
+INFO:     Waiting for application startup.
+{"ts":"2026-04-17 23:32:43,116","lvl":"INFO","msg":"{"event": "startup", "app": "Production AI Agent", "version": "1.0.0", "environment": "development"}"}
+{"ts":"2026-04-17 23:32:43,217","lvl":"INFO","msg":"{"event": "ready"}"}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8086 (Press CTRL+C to quit)
+{"ts":"2026-04-17 23:32:44,812","lvl":"WARNING","msg":"{"event": "ip_blocked", "ip": "127.0.0.1"}"}
+INFO:     127.0.0.1:60484 - "GET /health HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/_utils.py", line 77, in collapse_excgroups
+  |     yield
+  |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/anyio/_backends/_asyncio.py", line 799, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/uvicorn/protocols/http/httptools_impl.py", line 399, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/home/duykhongngu28/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(typ, value, traceback)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/06-lab-complete/app/main.py", line 135, in request_middleware
+    |     response: Response = await call_next(request)
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/home/duykhongngu28/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(typ, value, traceback)
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    |     raise exc
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/06-lab-complete/app/main.py", line 126, in ip_whitelist_filter
+    |     raise HTTPException(403, f"IP {client_ip} not allowed")
+    | fastapi.exceptions.HTTPException: 403: IP 127.0.0.1 not allowed
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/uvicorn/protocols/http/httptools_impl.py", line 399, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/home/duykhongngu28/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    raise exc
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/06-lab-complete/app/main.py", line 135, in request_middleware
+    response: Response = await call_next(request)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+    raise app_exc
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/home/duykhongngu28/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/_utils.py", line 83, in collapse_excgroups
+    raise exc
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/.venv/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duykhongngu28/massive/Vu-Duc-Duy-2A202600337-day-12/06-lab-complete/app/main.py", line 126, in ip_whitelist_filter
+    raise HTTPException(403, f"IP {client_ip} not allowed")
+fastapi.exceptions.HTTPException: 403: IP 127.0.0.1 not allowed
