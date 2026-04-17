@@ -25,11 +25,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Security, Depends, Request, Response
 from fastapi.security.api_key import APIKeyHeader
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import uvicorn
 
 from app.config import settings
+from app.auth import verify_token, authenticate_user, create_token
 
 # Mock LLM (thay bằng OpenAI/Anthropic khi có API key)
 from utils.mock_llm import ask as llm_ask
@@ -87,14 +89,22 @@ def check_and_record_cost(input_tokens: int, output_tokens: int):
 # Auth
 # ─────────────────────────────────────────────────────────
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+security = HTTPBearer(auto_error=False)
 
-def verify_api_key(api_key: str = Security(api_key_header)) -> str:
-    if not api_key or api_key != settings.agent_api_key:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid or missing API key. Include header: X-API-Key: <key>",
-        )
-    return api_key
+def verify_auth_method(
+    api_key: str = Security(api_key_header),
+    credentials: HTTPAuthorizationCredentials = Security(security)
+) -> str:
+    if api_key and api_key == settings.agent_api_key:
+        return api_key
+    if credentials:
+        user = verify_token(credentials)
+        return user["username"]
+        
+    raise HTTPException(
+        status_code=401,
+        detail="Invalid or missing authentication. Include header: X-API-Key or Authorization: Bearer <token>",
+    )
 
 # ─────────────────────────────────────────────────────────
 # Lifespan
@@ -145,7 +155,8 @@ async def request_middleware(request: Request, call_next):
         # Security headers
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
-        response.headers.pop("server", None)
+        if "server" in response.headers:
+            del response.headers["server"]
         duration = round((time.time() - start) * 1000, 1)
         logger.info(json.dumps({
             "event": "request",
@@ -172,9 +183,32 @@ class AskResponse(BaseModel):
     model: str
     timestamp: str
 
+class SummarizeRequest(BaseModel):
+    text: str = Field(..., min_length=10, max_length=10000,
+                      description="Text to summarize")
+
+class SummarizeResponse(BaseModel):
+    original_length: int
+    summary: str
+    timestamp: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 # ─────────────────────────────────────────────────────────
 # Endpoints
 # ─────────────────────────────────────────────────────────
+
+@app.post("/auth/token", tags=["Auth"])
+def login(body: LoginRequest):
+    user = authenticate_user(body.username, body.password)
+    token = create_token(user["username"], user["role"])
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in_minutes": 60,
+    }
 
 @app.get("/", tags=["Info"])
 def root():
@@ -183,7 +217,9 @@ def root():
         "version": settings.app_version,
         "environment": settings.environment,
         "endpoints": {
-            "ask": "POST /ask (requires X-API-Key)",
+            "auth": "POST /auth/token",
+            "ask": "POST /ask (requires X-API-Key or JWT)",
+            "summarize": "POST /summarize (requires X-API-Key or JWT)",
             "health": "GET /health",
             "ready": "GET /ready",
         },
@@ -194,12 +230,12 @@ def root():
 async def ask_agent(
     body: AskRequest,
     request: Request,
-    _key: str = Depends(verify_api_key),
+    _key: str = Depends(verify_auth_method),
 ):
     """
     Send a question to the AI agent.
 
-    **Authentication:** Include header `X-API-Key: <your-key>`
+    **Authentication:** Include header `X-API-Key: <your-key>` or `Authorization: Bearer <token>`
     """
     # Rate limit per API key
     check_rate_limit(_key[:8])  # use first 8 chars as key bucket
@@ -226,6 +262,26 @@ async def ask_agent(
         timestamp=datetime.now(timezone.utc).isoformat(),
     )
 
+@app.post("/summarize", response_model=SummarizeResponse, tags=["Agent"])
+async def summarize(
+    body: SummarizeRequest,
+    request: Request,
+    _key: str = Depends(verify_auth_method),
+):
+    check_rate_limit(_key[:8])
+    input_tokens = len(body.text.split()) * 2
+    check_and_record_cost(input_tokens, 0)
+
+    summary = llm_ask(f"Summarize: {body.text[:200]}")
+
+    output_tokens = len(summary.split()) * 2
+    check_and_record_cost(0, output_tokens)
+
+    return SummarizeResponse(
+        original_length=len(body.text),
+        summary=summary,
+        timestamp=datetime.now(timezone.utc).isoformat(),
+    )
 
 @app.get("/health", tags=["Operations"])
 def health():
@@ -252,7 +308,7 @@ def ready():
 
 
 @app.get("/metrics", tags=["Operations"])
-def metrics(_key: str = Depends(verify_api_key)):
+def metrics(_key: str = Depends(verify_auth_method)):
     """Basic metrics (protected)."""
     return {
         "uptime_seconds": round(time.time() - START_TIME, 1),
