@@ -2,17 +2,16 @@
 
 > **Student Name:** Vũ Đức Duy
 > **Student ID:** 2A202600337
-> **Date:** 18/04/2026
+> **Date:** 17/04/2026
 
 ---
 
 ## Public URL
 
 ```
-https://ai-agent-production-xxxx.onrender.com
+https://ai-agent-production-d1hi.onrender.com
 ```
 
-> **Lưu ý:** Thay `xxxx` bằng ID thực tế từ Render Dashboard của bạn.
 
 ## Platform
 
@@ -25,7 +24,7 @@ https://ai-agent-production-xxxx.onrender.com
 ### 1. Health Check
 
 ```bash
-curl https://ai-agent-production-xxxx.onrender.com/health
+curl https://ai-agent-production-d1hi.onrender.com/health
 ```
 
 **Expected:**
@@ -41,7 +40,7 @@ curl https://ai-agent-production-xxxx.onrender.com/health
 ### 2. Readiness Check
 
 ```bash
-curl https://ai-agent-production-xxxx.onrender.com/ready
+curl https://ai-agent-production-d1hi.onrender.com/ready
 ```
 
 **Expected:**
@@ -52,7 +51,7 @@ curl https://ai-agent-production-xxxx.onrender.com/ready
 ### 3. API Test — Không có key (phải trả 401)
 
 ```bash
-curl -X POST https://ai-agent-production-xxxx.onrender.com/ask \
+curl -X POST https://ai-agent-production-d1hi.onrender.com/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "Hello"}'
 ```
@@ -67,7 +66,7 @@ curl -X POST https://ai-agent-production-xxxx.onrender.com/ask \
 ### 4. API Test — Có key (phải trả 200)
 
 ```bash
-curl -X POST https://ai-agent-production-xxxx.onrender.com/ask \
+curl -X POST https://ai-agent-production-d1hi.onrender.com/ask \
   -H "X-API-Key: YOUR_AGENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"user_id": "test", "question": "What is deployment?"}'
@@ -87,7 +86,7 @@ curl -X POST https://ai-agent-production-xxxx.onrender.com/ask \
 ```bash
 for i in {1..25}; do
   curl -s -o /dev/null -w "Request $i: %{http_code}\n" \
-    -X POST https://ai-agent-production-xxxx.onrender.com/ask \
+    -X POST https://ai-agent-production-d1hi.onrender.com/ask \
     -H "X-API-Key: YOUR_AGENT_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"question": "Test '$i'"}'
@@ -98,7 +97,7 @@ done
 
 ```bash
 curl -H "X-API-Key: YOUR_AGENT_API_KEY" \
-  https://ai-agent-production-xxxx.onrender.com/metrics
+  https://ai-agent-production-d1hi.onrender.com/metrics
 ```
 
 ---
